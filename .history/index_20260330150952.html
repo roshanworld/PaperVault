@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MGM Noida Paper Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0a0a14;
+      --paper: #f7f5f0;
+      --cream: #ede9e1;
+      --accent: #e85d26;
+      --accent2: #3b5bdb;
+      --muted: #8b8580;
+      --card-bg: #ffffff;
+      --border: rgba(0,0,0,0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE TEXTURE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--ink);
+      color: white;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-bg-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,0.04) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.04) 60px);
+    }
+
+    .header-orb {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,93,38,0.18) 0%, transparent 70%);
+      top: -200px;
+      right: -100px;
+      pointer-events: none;
+    }
+
+    .header-orb2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,91,219,0.15) 0%, transparent 70%);
+      bottom: -150px;
+      left: 50px;
+      pointer-events: none;
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 70px 40px 60px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(232,93,38,0.15);
+      border: 1px solid rgba(232,93,38,0.3);
+      color: #f0854a;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 22px;
+      letter-spacing: 0.02em;
+    }
+
+    .header-badge span {
+      width: 7px;
+      height: 7px;
+      background: #e85d26;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    header h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    header p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      max-width: 500px;
+      margin-bottom: 40px;
+    }
+
+    .search-wrap {
+      max-width: 640px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 18px 140px 18px 22px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      color: white;
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border 0.2s, background 0.2s;
+    }
+
+    .search-wrap input::placeholder { color: rgba(255,255,255,0.35); }
+    .search-wrap input:focus {
+      border-color: rgba(232,93,38,0.5);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .search-wrap button {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 9px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .search-wrap button:hover {
+      background: #d04e1a;
+      transform: translateY(-50%) scale(1.03);
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      font-weight: 300;
+    }
+
+    /* ─── MAIN ─── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 40px 80px;
+    }
+
+    /* ─── FILTERS ─── */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+      padding: 20px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+    }
+
+    .filter-bar label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .filter-group select {
+      padding: 10px 14px;
+      border-radius: 9px;
+      border: 1.5px solid var(--border);
+      background: var(--paper);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b8580' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+
+    .filter-group select:focus { border-color: var(--accent2); }
+
+    .filter-btn {
+      align-self: flex-end;
+      padding: 10px 24px;
+      background: var(--ink);
+      color: white;
+      border: none;
+      border-radius: 9px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover { background: #1e1e2e; }
+
+    /* ─── SECTION HEADER ─── */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .section-link {
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .section-link:hover { text-decoration: underline; }
+
+    /* ─── SUBJECT CARDS ─── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 28px 24px;
+      border-radius: 18px;
+      border: 1.5px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--card-accent, var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+      border-color: transparent;
+    }
+
+    .card:hover::after { transform: scaleX(1); }
+
+    .card-icon {
+      font-size: 28px;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+
+    .card p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .card .pill {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      background: var(--pill-bg, #f0f0ff);
+      color: var(--pill-color, var(--accent2));
+    }
+
+    /* ─── PAPER LIST ─── */
+    .paper-list {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 60px;
+    }
+
+    .paper-item {
+      background: var(--card-bg);
+      padding: 20px 24px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .paper-item:hover {
+      border-color: rgba(59,91,219,0.2);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+
+    .paper-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .paper-meta {
+      flex: 1;
+    }
+
+    .paper-meta strong {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .paper-meta span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .paper-tag {
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-right: 6px;
+    }
+
+    .tag-sess { background: #fff0ea; color: #c94a13; }
+    .tag-put  { background: #eaf0ff; color: #2d4fbb; }
+
+    .paper-btn {
+      background: var(--ink);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 9px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+
+    .paper-btn:hover {
+      background: var(--accent2);
+      transform: scale(1.03);
+    }
+
+    /* ─── TELEGRAM BOX ─── */
+    .contribute-box {
+      background: var(--ink);
+      color: white;
+      padding: 56px 48px;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contribute-box::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,91,219,0.3) 0%, transparent 70%);
+      top: -150px;
+      right: -100px;
+      pointer-events: none;
+    }
+
+    .contribute-box::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,93,38,0.2) 0%, transparent 70%);
+      bottom: -100px;
+      left: 20%;
+      pointer-events: none;
+    }
+
+    .contribute-text { position: relative; z-index: 1; }
+
+    .contribute-text h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .contribute-text p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      max-width: 420px;
+    }
+
+    .contribute-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    .tg-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: #2AABEE;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .tg-btn:hover {
+      background: #1a9bde;
+      transform: scale(1.04);
+    }
+
+    .tg-note {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.35);
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 13px;
+      margin-top: 0;
+    }
+
+    footer strong { color: rgba(255,255,255,0.6); }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.5s forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    @media (max-width: 700px) {
+      .header-inner { padding: 50px 24px 44px; }
+      .container { padding: 40px 20px 60px; }
+      .header-stats { gap: 24px; }
+      .contribute-box { flex-direction: column; padding: 36px 28px; text-align: center; }
+      .contribute-text p { margin: 0 auto; }
+      .filter-bar { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-bg-lines"></div>
+    <div class="header-orb"></div>
+    <div class="header-orb2"></div>
+    <div class="header-inner">
+      <div class="header-badge fade-up">
+        <span></span> MGM Noida · Academic Resource Hub
+      </div>
+      <h1 class="fade-up delay-1">
+        Your Exam Papers,<br><em>All in One Place.</em>
+      </h1>
+      <p class="fade-up delay-2">
+        Browse sessional papers, PUTs, notes, and important questions — sorted by semester, branch & subject.
+      </p>
+      <div class="search-wrap fade-up delay-3">
+        <input type="text" placeholder="Search by subject, topic, year…" />
+        <button>Search</button>
+      </div>
+      <div class="header-stats fade-up delay-4">
+        <div class="stat">
+          <span class="stat-num">35+</span>
+          <span class="stat-label">Papers Uploaded</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Branches Covered</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">2026</span>
+          <span class="stat-label">Latest Year</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Filters -->
+    <div class="filter-bar fade-up">
+      <div class="filter-group">
+        <label>Semester</label>
+        <select>
+          <option>All Semesters</option>
+          <option>3rd</option>
+          <option>4th</option>
+          <option>5th</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Branch</label>
+        <select>
+          <option>All Branches</option>
+          <option>CSE</option>
+          <option>IT</option>
+          <option>ECE</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Subject</label>
+        <select>
+          <option>All Subjects</option>
+          <option>Operating System</option>
+          <option>Java</option>
+          <option>TAFL</option>
+          <option>Digital Electronics</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Exam Type</label>
+        <select>
+          <option>All Types</option>
+          <option>Sessional 1</option>
+          <option>Sessional 2</option>
+          <option>PUT</option>
+        </select>
+      </div>
+      <button class="filter-btn">Apply Filters</button>
+    </div>
+
+    <!-- Popular Subjects -->
+    <div class="section-header">
+      <h2 class="section-title">Popular Subjects</h2>
+      <a href="#" class="section-link">View all →</a>
+    </div>
+
+    <div class="cards">
+      <div class="card" style="--card-accent:#e85d26; --pill-bg:#fff0ea; --pill-color:#c94a13;">
+        <span class="card-icon">🖥️</span>
+        <h3>Operating System</h3>
+        <p>Process management, scheduling, memory</p>
+        <span class="pill">12 Papers</span>
+      </div>
+      <div class="card" style="--card-accent:#3b5bdb; --pill-bg:#eaf0ff; --pill-color:#2d4fbb;">
+        <span class="card-icon">☕</span>
+        <h3>Java</h3>
+        <p>OOP, collections, threading, frameworks</p>
+        <span class="pill">8 Papers</span>
+      </div>
+      <div class="card" style="--card-accent:#7c3aed; --pill-bg:#f3eeff; --pill-color:#6d28d9;">
+        <span class="card-icon">🔣</span>
+        <h3>TAFL</h3>
+        <p>Automata, grammars, Turing machines</p>
+        <span class="pill">6 Papers</span>
+      </div>
+      <a href="digital.html" style="text-decoration:none;">
+        <div class="card" style="--card-accent:#059669; --pill-bg:#ecfdf5; --pill-color:#047857;">
+          <span class="card-icon">⚡</span>
+          <h3>Digital Electronics</h3>
+          <p>Logic gates, circuits, flip-flops</p>
+          <span class="pill">1 Paper</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Latest Papers -->
+    <div class="section-header">
+      <h2 class="section-title">Latest Papers</h2>
+      <a href="#" class="section-link">Browse all →</a>
+    </div>
+
+    <div class="paper-list">
+      <div class="paper-item">
+        <div class="paper-icon">📄</div>
+        <div class="paper-meta">
+          <strong>OS Sessional 1 — 2026</strong>
+          <span>
+            <span class="paper-tag tag-sess">Sessional 1</span>
+            CSE · 5th Semester · 2026
+          </span>
+        </div>
+        <button class="paper-btn">Open Paper ↗</button>
+      </div>
+
+      <div class="paper-item">
+        <div class="paper-icon">📄</div>
+        <div class="paper-meta">
+          <strong>Java PUT — 2025</strong>
+          <span>
+            <span class="paper-tag tag-put">PUT</span>
+            CSE · 4th Semester · 2025
+          </span>
+        </div>
+        <button class="paper-btn">Open Paper ↗</button>
+      </div>
+
+      <div class="paper-item">
+        <div class="paper-icon">📄</div>
+        <div class="paper-meta">
+          <strong>TAFL Sessional 2 — 2026</strong>
+          <span>
+            <span class="paper-tag tag-sess">Sessional 2</span>
+            CSE · 5th Semester · 2026
+          </span>
+        </div>
+        <button class="paper-btn">Open Paper ↗</button>
+      </div>
+    </div>
+
+    <!-- Contribute CTA -->
+    <div class="contribute-box">
+      <div class="contribute-text">
+        <h2>Have a Paper? Share It 🎁</h2>
+        <p>Help your juniors by sending the latest sessional papers to our Telegram channel. Every contribution counts.</p>
+      </div>
+      <div class="contribute-actions">
+        <a href="#" class="tg-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          Join Telegram Channel
+        </a>
+        <span class="tg-note">500+ students already joined</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    © 2026 MGM Noida Paper Hub &nbsp;·&nbsp; Built with ❤️ by <strong>Roshan</strong>
+  </footer>
+
+</body>
+</html>
